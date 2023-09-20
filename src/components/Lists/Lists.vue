@@ -2,7 +2,7 @@
   <div class="table">
       <draggable
           class="table__space"
-          :list="list2"
+          v-model="fields"
           group="people"
           @change="log"
           itemKey="id"
@@ -29,49 +29,27 @@
 <script>
 import draggable from 'vuedraggable'
 import Element from "@/components/icons/Element.vue";
+import {useStore} from "vuex";
+import { computed } from 'vue'
 export default {
-  name: "two-lists",
-  display: "Two Lists",
-  order: 1,
+  name: "Fields",
   components: {
     draggable,
     Element
   },
-  data() {
-    return {
-      list2: [
-        { id: 1, color1: '#7FAA65', color2: '#B8D998'},
-        { id: 2, color1:  '#AA9765', color2: '#D9BB98'},
-        { id: 3 , color1: '#656CAA', color2: '#7481ED'},
-        { id: 4 },
-        { id: 5 },
-        { id: 6 },
-        { id: 7 },
-        { id: 8 },
-        { id: 9 },
-        { id: 10 },
-        { id: 11},
-        { id: 12 },
-        { id: 13 },
-        { id: 14 },
-        { id: 15 },
-        { id: 16 },
-        { id: 17 },
-        { id: 18 },
-        { id: 19 },
-        { id: 20 },
-        { id: 21 },
-        { id: 22 },
-        { id: 23 },
-        { id: 24 },
-        { id: 25 },
-      ]
-    };
+  computed: {
+    fields: {
+      get() {
+        return this.$store.state.fields
+      },
+      set(value) {
+        this.$store.commit('updateFields', value)
+      }
+    }
   },
   methods: {
     log: function(evt) {
       window.console.log(evt);
-      console.log(this.list2)
     }
   }
 };
