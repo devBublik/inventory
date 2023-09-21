@@ -1,69 +1,77 @@
 <template>
   <div class="table">
-      <draggable
-          class="table__space"
-          v-model="fields"
-          group="people"
-          @change="log"
-          itemKey="id"
-      >
-        <template #item="{ element, index }">
-          <div class="table__item"
-            :class="{
-            'table__item--top-left': index=== 0,
-            'table__item--top-right': index === 4,
-            'table__item--bottom-left': index === 20,
-            'table__item--bottom-right': index === 24
-            }"
-          >{{ element.name }}
-          <span class="table__item-ind"
-          :class="{'table__item-ind--ex': element.color1 || element.color2}"
-          >{{  element.color1? index + 1 : '' }}</span>
-            <Element :color1="element.color1" :color2="element.color2"/>
-          </div>
-
-        </template>
-      </draggable>
+    <FieldEl />
+    <draggable
+      class="table__space"
+      v-model="fields"
+      group="people"
+      @change="log"
+      itemKey="element.id"
+    >
+      <template #item="{ element, index }">
+        <div class="table__item" @click="open(element)">
+          {{ element.name }}
+          <span
+            class="table__item-ind"
+            :class="{ 'table__item-ind--ex': element.color1 || element.color2 }"
+            >{{ element.color1 ? element.id : '' }}</span
+          >
+          <CustomElement :color1="element.color1" :color2="element.color2" />
+        </div>
+      </template>
+    </draggable>
   </div>
 </template>
-<script>
+<script lang="ts">
 import draggable from 'vuedraggable'
-import Element from "@/components/icons/Element.vue";
-import {useStore} from "vuex";
-import { computed } from 'vue'
+import CustomElement from '@/components/icons/Element.vue'
+import FieldEl from '@/components/Lists/FieldEl.vue'
+import { type fieldInterface } from '@/types/index'
 export default {
-  name: "Fields",
+  name: 'InventoryFields',
   components: {
     draggable,
-    Element
+    CustomElement,
+    FieldEl
   },
   computed: {
     fields: {
       get() {
         return this.$store.state.fields
       },
-      set(value) {
+      set(value: fieldInterface) {
         this.$store.commit('updateFields', value)
       }
     }
   },
   methods: {
-    log: function(evt) {
-      window.console.log(evt);
+    log() {
+      document.body.style.cursor = 'grabbig'
+    },
+    open(element: fieldInterface) {
+      this.$emit('open', element)
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/vars.scss';
+@import '@/assets/styles/config.scss';
 .table {
   color: white;
   width: 100%;
 
   &__space {
     display: grid;
-    grid-template-columns: repeat(5, 105px);
+    grid-template-columns: repeat(5, minmax(50px, 105px));
+
+    @include max-width($mobail) {
+      grid-template-columns: repeat(3, minmax(50px, 105px));
+    }
+
+    @include max-width($sm-mobail) {
+      grid-template-columns: repeat(5, 1fr);
+    }
   }
 
   &__item {
@@ -75,21 +83,61 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: url(../../assets/images/svg/cursor.svg), pointer;
 
-    &--top-right {
-      border-top-right-radius: 12px;
-    }
-
-    &--top-left {
+    &:first-of-type {
       border-top-left-radius: 12px;
     }
 
-    &--bottom-left {
-      border-bottom-left-radius: 12px;
+    &:nth-of-type(5) {
+      border-top-right-radius: 12px;
+      @include max-width($mobail) {
+        border-top-right-radius: 0;
+      }
+      @include max-width($sm-mobail) {
+        border-top-right-radius: 12px;
+      }
     }
 
-    &--bottom-right {
+    &:nth-of-type(3) {
+      @include max-width($mobail) {
+        border-top-right-radius: 12px;
+      }
+      @include max-width($sm-mobail) {
+        border-top-right-radius: 0;
+      }
+    }
+
+    &:nth-of-type(21) {
+      border-bottom-left-radius: 12px;
+      @include max-width($sm-mobail) {
+        border-top-left-radius: 0;
+      }
+    }
+
+    &:nth-of-type(25) {
       border-bottom-right-radius: 12px;
+    }
+
+    @include max-width($mobail) {
+      border-radius: 0;
+    }
+
+    svg {
+      @include max-width($sm-mobail) {
+        width: 60%;
+      }
+    }
+
+    &.sortable-chosen {
+      border-radius: 8px;
+      &.sortable-ghost {
+        cursor: grabbing;
+      }
+
+      .table__item-ind {
+        display: none;
+      }
     }
   }
 

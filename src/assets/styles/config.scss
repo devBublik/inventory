@@ -1,0 +1,21 @@
+$black: #1e1e1e;
+$white: #ffffff;
+$green: #b8d998;
+$orange: #d9bb98;
+$purple: #7481ed;
+$dark-grey: #444;
+$border: #4d4d4d;
+$btn: #ff8888;
+$btn-hover: #ff776d;
+
+$tablet: 850px;
+$mobail: 750px;
+$sm-mobail: 575px;
+$sx-mobail: 375px;
+
+//mixins
+@mixin max-width($width) {
+  @media only screen and (max-width: $width) {
+    @content;
+  }
+}

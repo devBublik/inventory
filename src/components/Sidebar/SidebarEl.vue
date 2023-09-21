@@ -1,19 +1,27 @@
-<script setup>
-import Skeleton from "@/components/icons/Skeleton.vue";
-</script>
+<script lang="ts" setup></script>
 <template>
   <div class="sidebar">
     <div class="sidebar__top">
-      <img src="@/assets/images/img.jpg" class="sidebar__image" alt="изображение"/>
+      <img src="@/assets/images/img.png" class="sidebar__image" alt="изображение" />
     </div>
     <div class="sidebar__info">
-      <Skeleton/>
+      <Skeleton />
     </div>
   </div>
 </template>
 
+<script lang="ts">
+import Skeleton from '@/components/icons/Skeleton.vue'
+export default {
+  name: 'SidebarEl',
+  components: {
+    Skeleton
+  }
+}
+</script>
+
 <style lang="scss">
-@import '@/assets/vars.scss';
+@import '@/assets/styles/config.scss';
 .sidebar {
   max-width: 236px;
   width: 100%;
@@ -21,11 +29,15 @@ import Skeleton from "@/components/icons/Skeleton.vue";
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 1px solid #4D4D4D;
+  border: 1px solid #4d4d4d;
   border-radius: 12px;
   max-height: 500px;
 
-  &__top{
+  @include max-width($sm-mobail) {
+    max-width: 100%;
+  }
+
+  &__top {
     margin: 0 0 20px 0;
     max-width: 208px;
     width: 100%;
