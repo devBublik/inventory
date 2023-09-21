@@ -22,6 +22,7 @@ import CustomElement from '@/components/icons/Element.vue'
 import ButtonEl from '@/components/ButtonEl/ButtonEl.vue'
 import CloseIcon from '@/components/icons/CloseIcon.vue'
 import { defineComponent } from 'vue'
+// @ts-ignore
 import { mapMutations } from 'vuex'
 
 export default defineComponent({
